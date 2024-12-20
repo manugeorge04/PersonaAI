@@ -1,0 +1,44 @@
+# Python bytecode files
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.pyd
+*.so
+
+# Virtual environment
+*.env
+*.venv
+.venv/
+env/
+venv/
+
+# Django specific
+db.sqlite3
+db.sqlite3-journal
+*/migrations/*.pyc
+static/
+media/
+local_settings.py
+
+# IDEs and Editors
+.vscode/
+.idea/
+.project
+.settings/
+
+# System and OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+
+# Testing
+.coverage
+*.cover
+coverage.xml
+
+# Docker files (if used)
+docker-compose.override.yml
+docker-compose.yml
+Dockerfile
