@@ -42,3 +42,6 @@ coverage.xml
 docker-compose.override.yml
 docker-compose.yml
 Dockerfile
+
+# Personal Data
+data/
