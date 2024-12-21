@@ -13,8 +13,8 @@ from datetime import datetime
 def send_message(request):
     data = json.loads(request.body)
     query = data['question']
-    session_id = request.session.get('session_id', str(uuid.uuid4()))
-    print(session_id, query)
+    # session_id = request.session.get('session_id', str(uuid.uuid4()))
+    session_id = request.COOKIES.get('session_id', str(uuid.uuid4()))
     # Retrieve or create memory for the session
     memory = get_or_create_memory(session_id)
 
@@ -33,4 +33,8 @@ def send_message(request):
     response_content = response["messages"][-1].content
     response_data = {"response": response_content}
 
-    return Response(response_data, status=status.HTTP_200_OK)
+    response = Response(response_data, status=status.HTTP_200_OK)
+    response.set_cookie(
+        'session_id', session_id, max_age=60*60*24, secure=False, httponly=True, samesite='Lax'
+    )
+    return response
