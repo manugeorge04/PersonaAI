@@ -13,7 +13,7 @@ from langgraph.prebuilt import create_react_agent
 load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
 
-client = chromadb.PersistentClient(path="./manu_db")
+client = chromadb.PersistentClient(path="../manu_db")
 
 # Initialize ChromaDB client
 resume_vectordb = Chroma(
@@ -72,41 +72,3 @@ def get_or_create_memory(session_id):
         # If no memory exists for the session, create a new one
         session_memory[session_id] = MemorySaver()
     return session_memory[session_id]
-
-
-# @app.route('/ask_question', methods=['POST'])
-def ask_question(question):
-    # data = request.json
-    # query = data['question']
-    # session_id = data['session_id']
-
-    data = {"question": question,
-    "session_id": "manu"}
-    query = data['question']
-    session_id = data['session_id']
-
-    # Retrieve or create memory for the session
-    memory = get_or_create_memory(session_id)
-
-    today_date = datetime.now().strftime("%Y-%m-%d")
-    system_prompt = get_system_prompt(today_date)
-
-    messages = [
-        {"role": "system", "content": system_prompt},
-        {"role": "user", "content": query}
-    ]
-
-    # Run the agent with session-specific memory
-    agent_executor = create_react_agent(llm, tools, checkpointer=memory)
-    response = agent_executor.invoke({"messages": messages}, config={"configurable": {"thread_id": session_id}})
-
-    response_content = response["messages"][-1].content
-    return response_content
-    # return jsonify({"response": response_content})
-
-
-if __name__ == '__main__':
-    # app.run()
-    while True:
-        question = input('Ask a question')
-        print(ask_question(question))
