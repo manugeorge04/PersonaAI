@@ -7,8 +7,6 @@ from llm_utils.chatbot import get_or_create_memory, get_system_prompt, llm, tool
 from langgraph.prebuilt import create_react_agent
 from datetime import datetime
 
-# Create your views here.
-
 @api_view(["POST"])
 def send_message(request):
     data = json.loads(request.body)
@@ -38,7 +36,5 @@ def send_message(request):
     response_data = {"response": response_content}
 
     response = Response(response_data, status=status.HTTP_200_OK)
-    response.set_cookie(
-        'session_id', session_id, max_age=60*60*24, secure=False, httponly=True, samesite='Lax'
-    )
+
     return response
