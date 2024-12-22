@@ -13,8 +13,12 @@ from datetime import datetime
 def send_message(request):
     data = json.loads(request.body)
     query = data['question']
-    # session_id = request.session.get('session_id', str(uuid.uuid4()))
-    session_id = request.COOKIES.get('session_id', str(uuid.uuid4()))
+    # Use Django's session framework to get the session ID
+    session_id = request.session.session_key
+    if not session_id:
+        # If no session exists, create a new one
+        request.session.create()
+        session_id = request.session.session_key
     # Retrieve or create memory for the session
     memory = get_or_create_memory(session_id)
 

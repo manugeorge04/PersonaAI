@@ -32,6 +32,8 @@ DEBUG = True
 ALLOWED_HOSTS = str(os.getenv("ALLOWED_HOSTS")).split(",")
 
 
+SESSION_COOKIE_AGE = 60 * 60 * 24
+
 # Application definition
 
 INSTALLED_APPS = [
