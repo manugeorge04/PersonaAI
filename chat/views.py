@@ -7,14 +7,16 @@ from llm_utils.chatbot import get_or_create_memory, get_system_prompt, llm, tool
 from langgraph.prebuilt import create_react_agent
 from datetime import datetime
 
-# Create your views here.
-
 @api_view(["POST"])
 def send_message(request):
     data = json.loads(request.body)
     query = data['question']
-    # session_id = request.session.get('session_id', str(uuid.uuid4()))
-    session_id = request.COOKIES.get('session_id', str(uuid.uuid4()))
+    # Use Django's session framework to get the session ID
+    session_id = request.session.session_key
+    if not session_id:
+        # If no session exists, create a new one
+        request.session.create()
+        session_id = request.session.session_key
     # Retrieve or create memory for the session
     memory = get_or_create_memory(session_id)
 
@@ -34,7 +36,5 @@ def send_message(request):
     response_data = {"response": response_content}
 
     response = Response(response_data, status=status.HTTP_200_OK)
-    response.set_cookie(
-        'session_id', session_id, max_age=60*60*24, secure=False, httponly=True, samesite='Lax'
-    )
+
     return response
